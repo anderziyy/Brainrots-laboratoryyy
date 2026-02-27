@@ -402,36 +402,43 @@ RebirthSwitchBG.MouseButton1Click:Connect(function()
 end)
 
 local DropdownFrame = Instance.new("Frame")
-DropdownFrame.Size = UDim2.new(0.95, 0, 0, 240)
-DropdownFrame.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+DropdownFrame.Size = UDim2.new(0.95, 0, 0, 240) -- Tamanho total para caber os 8 botões
+DropdownFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40) -- Cor mais escura para destacar
+DropdownFrame.BorderSizePixel = 0
 DropdownFrame.Visible = false
-DropdownFrame.ZIndex = 5
+DropdownFrame.ZIndex = 10 -- Aumente o ZIndex para ficar no topo
 DropdownFrame.Parent = MainContent
 Instance.new("UICorner", DropdownFrame).CornerRadius = UDim.new(0, 8)
 
 local DropdownList = Instance.new("UIListLayout")
 DropdownList.Parent = DropdownFrame
 DropdownList.SortOrder = Enum.SortOrder.LayoutOrder
+DropdownList.Padding = UDim.new(0, 2) -- Espaço entre os nomes
 
 for i = 1, 8 do
     local dropBtn = Instance.new("TextButton")
-    dropBtn.Size = UDim2.new(1, 0, 0, 30)
-    dropBtn.BackgroundTransparency = 1
+    dropBtn.Size = UDim2.new(1, 0, 0, 30) -- Altura fixa de 30 para cada botão
+    dropBtn.BackgroundTransparency = 0.5 -- Um pouco de fundo para ver o clique
+    dropBtn.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
     dropBtn.Text = "Rebirth " .. i
     dropBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-    dropBtn.Font = Enum.Font.SourceSans
+    dropBtn.Font = Enum.Font.SourceSansBold -- Fonte negrito para facilitar leitura
     dropBtn.TextSize = 16
+    dropBtn.ZIndex = 11 -- ZIndex maior que a Frame de fundo
     dropBtn.Parent = DropdownFrame
+    
     dropBtn.MouseButton1Click:Connect(function()
         currentRebirthSelect = i
         RebirthLabelBtn.Text = "Rebirth Auto Brainrots: " .. i
         DropdownFrame.Visible = false
-        repositionElements("Farm")
+        repositionElements("Farm") -- Recalcula o espaço agora que a caixa sumiu
     end)
 end
+
 RebirthLabelBtn.MouseButton1Click:Connect(function()
     DropdownFrame.Visible = not DropdownFrame.Visible
-    repositionElements("Farm")
+    -- Isso faz com que os itens abaixo da dropdown "empurrem" para baixo ou subam
+    repositionElements("Farm") 
 end)
 table.insert(options["Farm"], RebirthContainer)
 table.insert(options["Farm"], DropdownFrame)
