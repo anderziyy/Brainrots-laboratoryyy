@@ -609,6 +609,7 @@ local buyLighter = createOption("Auto Lighter", false, "Buy")
 local isAutoSpin = createOption("Auto Spin", false, "Buy")
 
 local isAutoMystic = createOption("Auto Mystic", false, "Farm")
+local isAutoSecret = createOption("Auto Secret", false, "Farm")
 local isAutoStellar = createOption("Auto Stellar", false, "Farm")
 local isAutoIndex, IdxContainer, IdxSwitch = createOption("Auto Index Missing [Click]", false, "Farm")
 
@@ -802,11 +803,12 @@ local function checkIndex(name, mutation)
 end
 
 RunService.Heartbeat:Connect(function()
+    local autoSecret = isAutoSecret()
     local autoMystic = isAutoMystic()
     local autoStellar = isAutoStellar()
     local autoIdx = isAutoIndex()
 
-    if not (autoMystic or autoStellar or autoIdx) then 
+    if not (autoSecret or autoMystic or autoStellar or autoIdx) then 
         targetHead = nil 
         if isHidden then setVisibility(true) end
         return 
@@ -840,7 +842,9 @@ RunService.Heartbeat:Connect(function()
                 elseif tText:find("Rainbow") then currentMut = "Rainbow"
                 elseif tText:find("Lava") then currentMut = "Lava" end
 
-                if autoStellar and (rarityText:find("stellar") or stellarNames[titleText]) then
+                if autoSecret and (rarityText:find("secret") or secretNames[titleText]) then
+                    currentPriority = 4
+                elseif autoStellar and (rarityText:find("stellar") or stellarNames[titleText]) then
                     currentPriority = 3
                 elseif autoMystic and (rarityText:find("mythic") or mythicNames[titleText]) then
                     currentPriority = 2
@@ -918,22 +922,27 @@ end
 PlayerGui.Notification.DescendantAdded:Connect(function(descendant)
     if isAnyBuyActive() then
         task.spawn(function()
-            task.wait(0.1)
-            pcall(function()
-                local text = ""
-                if descendant:IsA("TextLabel") then
-                    text = descendant.Text
-                elseif descendant:IsA("Frame") then
-                    local lbl = descendant:FindFirstChildWhichIsA("TextLabel", true)
-                    if lbl then text = lbl.Text end
-                end
-                
-                if text:find("enough money") or text:find("not in stock") then
-                    if descendant:IsA("Frame") or descendant:IsA("TextLabel") then
-                        descendant.Visible = false
+            local attempts = 0
+            while attempts < 10 do
+                local success, err = pcall(function()
+                    if not descendant or not descendant.Parent then return end
+                    local text = ""
+                    if descendant:IsA("TextLabel") then
+                        text = descendant.Text:lower()
+                    else
+                        local lbl = descendant:FindFirstChildWhichIsA("TextLabel", true)
+                        if lbl then text = lbl.Text:lower() end
                     end
-                end
-            end)
+
+                    if text:find("enough money") or text:find("stock") then
+                        descendant:Destroy()
+                        attempts = 10
+                    end
+                end)
+                if not success or attempts == 10 then break end
+                attempts = attempts + 1
+                task.wait()
+            end
         end)
     end
 end)
