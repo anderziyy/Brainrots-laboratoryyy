@@ -769,6 +769,13 @@ local mythicNames = {
     ["Cavallo Virtuoso"] = true
 }
 
+local secretNames = {
+    ["La Vacca Saturno Saturnita"] = true, ["Esok Sekolah"] = true, ["Tralaledon"] = true, 
+    ["Tralalero Tralala"] = true, ["Chicleteira Bicicleteira"] = true, ["Torrtuginni Dragonfrutini"] = true, 
+    ["Nuclearo Dinosauro"] = true, ["Quesadilla Crocodila"] = true, ["Graipussi Medussi"] = true, 
+    ["Lucky Block"] = true, ["Caramelini Brasilini"] = true, ["Garama and Madundung"] = true
+}
+
 local stellarNames = {
     ["Meowl"] = true, ["Smurf Cat"] = true, ["Capitano Clash Warnini"] = true, 
     ["Strawberry Elephant"] = true
