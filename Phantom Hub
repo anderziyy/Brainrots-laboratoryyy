@@ -660,15 +660,15 @@ indexClickArea.MouseButton1Click:Connect(function()
     repositionElements("Farm")
 end)
 
+local isAutoBat = createOption("Auto Bat", false, "Config")
+local isAntiAFK = createOption("Anti AFK", false, "Config")
 local isInfiniteJump = createOption("Infinite Jump", false, "Config")
+local isStaffDetector = createOption("Staff Detector", false, "Config")
 local isSpeedEnabled = createOption("Enable Speed", false, "Config")
 local customSpeedVal = 32
 createSlider("Speed", 1, 300, 32, "Config", function(val)
     customSpeedVal = val
 end)
-local isAutoBat = createOption("Auto Bat", false, "Config")
-local isAntiAFK = createOption("Anti AFK", false, "Config")
-local isStaffDetector = createOption("Staff Detector", false, "Config")
 
 function showTab(tabName)
     activeTab = tabName
